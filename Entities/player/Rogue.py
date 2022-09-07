@@ -4,4 +4,4 @@ import PlayerClasses
 class Rogue(PlayerClasses)
     Invisibily:bool
     daggers:int
-    AsUsedInvisibility:bool    
+    AsUsedInvisibility:bool
