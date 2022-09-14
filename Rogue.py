@@ -1,7 +1,7 @@
 import sys
-import PlayerClasses
+from PlayerClasses import playerClasses
 
-class Rogue(PlayerClasses):
+class Rogue(playerClasses):
     Invisibily:bool
     daggers:int
     AsUsedInvisibility:bool

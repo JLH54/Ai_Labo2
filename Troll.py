@@ -1,12 +1,12 @@
 import sys
-import ennemies
+from Ennemies import ennemies
 
-class Troll(ennemies)
+class Troll(ennemies):
     HealthMultiplier:2
     WeaknessMultiplier:bool
 
-    def isItFlame(Fire)
-        if(Fire)
+    def isItFlame(Fire):
+        if(Fire):
             WeaknessMultiplier = True
-        else
+        else:
             WeaknessMultiplier = False
