@@ -1,9 +1,5 @@
+# -*- coding: utf-8 -*-
 import sys
-
-from pip import main
 from Engine import engine
 
-def main():
-    engine.start()
-
-main()
+moteur = engine()
