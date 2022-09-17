@@ -8,3 +8,4 @@ class playerClasses(actor):
     ClassName:int
     Purse:int
     Fame:int
+    class_id:int

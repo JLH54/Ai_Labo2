@@ -1,27 +1,41 @@
 import sys
 from Ennemies import ennemies
+import random
 
 class Gobelins(ennemies): 
     Weapon:str
     HasShield:bool
     ShieldPoints:int
 
-    def Shielded(HasShield):
+    def Shielded(self, HasShield):
         if HasShield:
-            ShieldPoints = 5 * difficulty
+            ShieldPoints = 5 * self.difficulty
         else:
             ShieldPoints = 0
-    
-    #def WeaponEquipped():
-        # match difficulty:
-        #     case 1:
-        #         AttackPoint = 5
-        #         return Weapon == "Stick"
-        #     case 2:
-        #         AttackPoint = 8
-        #         return Weapon == "Knife"
-        #     case 3:
-        #         AttackPoint = 13
-        #         return Weapon == "Sword"
-        #     case _:
-        #         return "Something is wrong with the gobelin"
+
+    def behaviour(self, player):
+        self.protected = False
+        actionDecider = random.randrange(0,101)
+        if(self.dead == False):
+            if(actionDecider >= 0 and actionDecider <= 60):
+                self.goblinAttack(player)
+            elif(actionDecider >= 61 and actionDecider <= 80):
+                self.goblinProtect()
+            elif(actionDecider >= 81 and actionDecider <= 100):
+                print(self.CarachterName + " is laughing at you")
+
+    def goblinAttack(self, player):
+        player.TakeDamage(self.AttackPoint)
+        print(self.CarachterName +" attacked you and did " + str(self.AttackPoint) + " damage")
+
+
+    def goblinProtect(self):
+        self.protected = True
+        print(self.CarachterName + " decided to protect himself")
+
+
+    def __init__(self, name, level):
+        super().__init__(name, level)
+        self.HealthPoints = 3 * level
+        self.AttackPoint = random.randrange(1,4)
+        self.className = "Gobelin"

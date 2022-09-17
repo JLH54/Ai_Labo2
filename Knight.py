@@ -6,8 +6,8 @@ class Knight(PlayerClasses):
     IsArmed:bool
     ThrowWeaponPoint:int
 
-    def Shielded(HasShield):
-        if HasShield:
-            ArmorPoints = 15
-        else:
-            ArmorPoint = 0
+    # def Shielded(HasShield):
+    #     if HasShield:
+    #         ArmorPoints = 15
+    #     else:
+    #         ArmorPoint = 0

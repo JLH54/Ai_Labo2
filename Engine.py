@@ -1,5 +1,4 @@
-from pickle import TRUE
-from random import random
+import random
 import sys
 from PlayerClasses import playerClasses
 from Rogue import Rogue
@@ -10,10 +9,11 @@ from Troll import Troll
 from Zombies import Zombies
 
 class engine():
-    global ForestTaken
-    global SwampTaken
-    global CaveTaken
-    global player
+    player:playerClasses
+    ForestTaken = False
+    SwampTaken = False
+    CaveTaken = False
+
     def GameStarted(self):
         inGame = 1
         while(inGame == 1):
@@ -36,86 +36,111 @@ class engine():
         inGameChoice = input("") 
         if (int(inGameChoice) == 1):
             #player = Knight()
-            player = Mage(Player_Name, inGameChoice)
-            return player
+            self.player = Mage(Player_Name, int(inGameChoice))
         elif (int(inGameChoice) == 2):
-            player = Mage(Player_Name, inGameChoice)
-            return player
+            self.player = Mage(Player_Name, int(inGameChoice))
         elif(int(inGameChoice) == 3):
-            player = Rogue(Player_Name, inGameChoice)
-            return player
+            self.player = Rogue(Player_Name, int(inGameChoice))
         elif(int(inGameChoice) != 1 or int(inGameChoice) != 2 or int(inGameChoice) != 3):
             print("You have made no choice")
             inGameChoice = self.PlayerChoice()
 
     def PlayerChooseThePlace(self):
-        global ForestTaken
-        global SwampTaken
-        global CaveTaken
-        ForestTaken = False
-        SwampTaken = False
-        CaveTaken = False
         print("The king needs you to clean those places")
         while(True):
-            if(ForestTaken == False):
+            if(self.ForestTaken == False):
                 print("1 : forest of goblins")
-            if(SwampTaken == False):
+            if(self.SwampTaken == False):
                 print("2 : swamp of zombies")
-            if(CaveTaken == False):
+            if(self.CaveTaken == False):
                 print("3 : cave of trolls")
             inGameChoice = input("")
             if(int(inGameChoice) ==1):
-                if(ForestTaken == True):
+                if(self.ForestTaken == True):
                     print("You have already been there it's clean")
                 else:
-                    ForestTaken = True
+                    self.ForestTaken = True
                     return 1
             if(int(inGameChoice) ==2):
-                if(SwampTaken == True):
+                if(self.SwampTaken == True):
                     print("You have already been there it's clean")
                 else:
-                    SwampTaken = True
+                    self.SwampTaken = True
                     return 2
             if(int(inGameChoice) == 3):
-                if(CaveTaken == True):
+                if(self.CaveTaken == True):
                     print("You have already been there it's clean")
                 else:
-                    CaveTaken = True
+                    self.CaveTaken = True
                     return 3
 
-    def PlaceChosen(self):
+    def PlaceChosen(self, level):
         place_chosen = self.PlayerChooseThePlace()
         if(place_chosen == 1):
             how_many_goblins = random.randrange(2,3)
             goblins = []
-            for i in how_many_goblins:
-                goblin = Gobelins()
+            for i in range(how_many_goblins):
+                goblin = Gobelins("Goblin" + str(i), level)
                 goblins.append(goblin)
+            return goblins
         if(place_chosen == 2):
-            how_many_zombies = random.randrange(1,5)
+            how_many_zombies = random.randrange(1,4 * level)
             zombies = []
-            for i in how_many_zombies:
-                zombie = Zombies()
+            for i in range(how_many_zombies):
+                zombie = Zombies("Zombie" + str(i), level)
                 zombies.append(zombie)
+            return zombies
         if(place_chosen == 3):
             how_many_trolls = random.randrange(1,2)
             trolls = []
-            for i in how_many_trolls:
-                troll = Troll()
+            for i in range(how_many_trolls):
+                troll = Troll("Troll" + str(i), level)
                 trolls.append(troll)
+            return trolls
 
-    def PlayerTurn(self):
-        
+    def PlayerTurn(self, player, ennemis):
+        if(player.ClassName == 1):
+            player.KnightChoice()
+        elif(player.ClassName == 2):
+            player.MageChoice()
+        elif(player.ClassName == 3):
+            player.RogueAttack()
+            
+    def TurnBaseCombat(self, ennemis):
+        isOn = True
+        numbersOfDeath = 0
+        while(isOn):
+            if(self.player.ClassName == 1):
+                didThePlayerRan = self.player.MageAction(ennemis)
+            elif(self.player.ClassName == 2):
+                didThePlayerRan = self.player.MageAction(ennemis)
+            elif(self.player.ClassName == 3):
+                didThePlayerRan = self.player.MageAction(ennemis)
+            if(didThePlayerRan == True):
+                self.PlayerRan()
+                isOn = False
+            for i in range(len(ennemis)):
+                if(ennemis[i].returnDead() == True):
+                    numbersOfDeath += 1
+                ennemis[i].behaviour(self.player)
+            if(numbersOfDeath == len(ennemis)):
+                print("You killed everybody")
+                break
+
+    def PlayerRan(self):
+        print("You started to run towards the castle")
+        print("The king is disappointed in you, you lost some fame")
+        print("You take a rest for the next day")
 
     def start(self):
         started = self.GameStarted()
+        level = 0
         while(started == 1):
-            player = self.PlayerChoice()
-            self.PlaceChosen()
+            level += 1
+            self.PlayerChoice()
+            ennemis = self.PlaceChosen(level)
+            self.TurnBaseCombat(ennemis)
             started = 0
 
     def __init__(self):
-        ForestTaken = False
-        SwampTaken = False
-        CaveTaken = False
         self.start()
