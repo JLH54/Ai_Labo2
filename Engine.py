@@ -2,7 +2,7 @@ import random
 import sys
 from PlayerClasses import playerClasses
 from Rogue import Rogue
-#from Knight import Knight
+from Knight import Knight
 from Mage import Mage
 from Gobelins import Gobelins
 from Troll import Troll
@@ -35,8 +35,7 @@ class engine():
         print("3 : Rogue\n")
         inGameChoice = input("") 
         if (int(inGameChoice) == 1):
-            #player = Knight()
-            self.player = Mage(Player_Name, int(inGameChoice))
+            self.player = Knight(Player_Name, int(inGameChoice))
         elif (int(inGameChoice) == 2):
             self.player = Mage(Player_Name, int(inGameChoice))
         elif(int(inGameChoice) == 3):
@@ -97,25 +96,18 @@ class engine():
                 troll = Troll("Troll" + str(i), level)
                 trolls.append(troll)
             return trolls
-
-    def PlayerTurn(self, player, ennemis):
-        if(player.ClassName == 1):
-            player.KnightChoice()
-        elif(player.ClassName == 2):
-            player.MageChoice()
-        elif(player.ClassName == 3):
-            player.RogueAttack()
             
     def TurnBaseCombat(self, ennemis):
         isOn = True
         numbersOfDeath = 0
         while(isOn):
-            if(self.player.ClassName == 1):
-                didThePlayerRan = self.player.MageAction(ennemis)
-            elif(self.player.ClassName == 2):
-                didThePlayerRan = self.player.MageAction(ennemis)
-            elif(self.player.ClassName == 3):
-                didThePlayerRan = self.player.MageAction(ennemis)
+            didThePlayerRan = self.player.Action(ennemis)
+            # if(self.player.ClassName == 1):
+            #     didThePlayerRan = self.player.MageAction(ennemis)
+            # elif(self.player.ClassName == 2):
+            #     didThePlayerRan = self.player.MageAction(ennemis)
+            # elif(self.player.ClassName == 3):
+            #     didThePlayerRan = self.player.MageAction(ennemis)
             if(didThePlayerRan == True):
                 self.PlayerRan()
                 isOn = False
@@ -132,15 +124,53 @@ class engine():
         print("The king is disappointed in you, you lost some fame")
         print("You take a rest for the next day")
 
+    def GamePlus(self):
+        print("You have clean the places the king asked, Bravo!")
+        print("Do you want to start again(the levels are harder)")
+        print("1 : yes")
+        print("2 : no")
+        inGameChoice = input("")
+        if(int(inGameChoice) == 1):
+            self.CaveTaken = False
+            self.ForestTaken = False
+            self.SwampTaken = False
+            print("Good Luck.")
+            return 1
+        if(int(inGameChoice) == 2):
+            print("Thank you for playing")
+            return 2
+        else:
+            print("Dude you have to press 1 or 2, ONE OR TWO")
+            self.GamePlus()
+        
+    def boast(self):
+        print("what do you want to do?")
+        print("1 : Continue on with your quest")
+        print("2 : boast at the castle")
+        inGameChoice = input("")
+        if(int(inGameChoice) == 1):
+            return 1
+        if(int(inGameChoice) == 2):
+            return 2
+        else:
+            print("Dude you have to press 1 or 2, ONE OR TWO")
+            self.GamePlus()
+
     def start(self):
         started = self.GameStarted()
-        level = 0
+        self.PlayerChoice()
+        placesDone = 0
+        level = 1
         while(started == 1):
-            level += 1
-            self.PlayerChoice()
             ennemis = self.PlaceChosen(level)
             self.TurnBaseCombat(ennemis)
-            started = 0
+            placesDone += 1
+            boasting = self.boast()
+            while(boasting == 2):
+                boasting = self.boast()
+            if(placesDone == 3):
+                started = self.GamePlus
+            level += 1
 
     def __init__(self):
         self.start()

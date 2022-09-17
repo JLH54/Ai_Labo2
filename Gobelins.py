@@ -25,17 +25,19 @@ class Gobelins(ennemies):
                 print(self.CarachterName + " is laughing at you")
 
     def goblinAttack(self, player):
-        player.TakeDamage(self.AttackPoint)
-        print(self.CarachterName +" attacked you and did " + str(self.AttackPoint) + " damage")
-
+        if(player.ReturnProtect() == True):
+            print(self.CarachterName +" tried to attack you")
+        else:
+            player.TakeDamage(self.AttackPoint, player.ReturnProtect())
+            print(self.CarachterName +" attacked you and did " + str(self.AttackPoint) + " damage")
 
     def goblinProtect(self):
         self.protected = True
         print(self.CarachterName + " decided to protect himself")
-
 
     def __init__(self, name, level):
         super().__init__(name, level)
         self.HealthPoints = 3 * level
         self.AttackPoint = random.randrange(1,4)
         self.className = "Gobelin"
+        self.protected = False

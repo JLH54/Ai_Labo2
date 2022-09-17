@@ -26,11 +26,15 @@ class Zombies(ennemies):
                 print(self.CarachterName + " is looking at you")
 
     def zombieAttack(self, player):
-        player.TakeDamage(self.AttackPoint)
-        print(self.CarachterName +" attacked you and did " + str(self.AttackPoint) + " damage")
+        if(player.ReturnProtect() == True):
+            print(self.CarachterName +" tried to attack you")
+        else:
+            player.TakeDamage(self.AttackPoint, player.ReturnProtect())
+            print(self.CarachterName +" attacked you and did " + str(self.AttackPoint) + " damage")
     
     def __init__(self, name, level):
         super().__init__(name, level)
         self.AttackPoint = 2
         self.HealthPoints = 8
         self.MaxHealthPoints = self.HealthPoints
+        self.protected = False
